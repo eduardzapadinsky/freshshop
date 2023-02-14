@@ -4,5 +4,8 @@ from .models import UserModel
 
 
 @admin.register(UserModel)
-class OrderAdmin(admin.ModelAdmin):
+class UserAdmin(admin.ModelAdmin):
+    """
+    Admin panel: User
+    """
     list_display = ["email", "wallet"]

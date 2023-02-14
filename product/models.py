@@ -7,8 +7,8 @@ class Product(models.Model):
     Model for shop product
     """
     name: str = models.CharField(max_length=255)
-    slug: str = models.SlugField(max_length=255, verbose_name="url", unique=True, editable=False)
-    description: str = models.CharField(max_length=1000)
+    slug: str = models.SlugField(max_length=255, verbose_name="url", unique=True)
+    description: str = models.TextField(max_length=1000)
     price: float = models.DecimalField(max_digits=7, decimal_places=2)
     count: float = models.DecimalField(max_digits=7, decimal_places=2)
     picture: str = models.ImageField(upload_to="shop_gallery")
