@@ -60,7 +60,3 @@ class LoginForm(forms.Form):
                                    "class": "form-control",
                                    "placeholder": "Password"
                                }))
-    #
-    # class Meta:
-    #     model = UserModel
-    #     fields = ["username", "password"]

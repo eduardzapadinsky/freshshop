@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 
 
@@ -19,3 +20,6 @@ class Product(models.Model):
         """
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+    def get_url(self):
+        return reverse("product-detail", args=[self.slug])
