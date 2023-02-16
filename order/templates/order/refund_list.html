@@ -16,26 +16,28 @@
                         {% endfor %}
                     </ul>
                 {% endif %}
-                {% for order in order_list %}
+                {% for refund in refund_list %}
                     <div class="media mb-2 border-bottom">
-                        <div class="media-body"><a href="detail.html"> Order #{{ order.id }}</a>
+                        <div class="media-body"><a href="detail.html"> Refund #{{ refund.id }}</a>
                             <div class="small text-dark">
-                                Product: {{ order.product.name }}
+                                Product: {{ refund.order.product.name }}
                                 <span class="mx-2">|</span>
-                                Price: ${{ order.product.price }}
+                                Price: ${{ refund.order.product.price }}
                                 <span class="mx-2">|</span>
-                                Qty: {{ order.count }}
+                                Qty: {{ refund.order.count }}
                                 <span class="mx-2">|</span>
-                                Subtotal: ${% widthratio order.product.price 1 order.count %}
+                                Subtotal: ${% widthratio refund.order.product.price 1 refund.order.count %}
                                 <span class="mx-2">|</span>
-                                Created at: {{ order.created }}
+                                Order created at: {{ refund.order.created }}
+                                <span class="mx-2">|</span>
+                                Refund created at: {{ refund.created }}
                             </div>
                         </div>
-{#                        {% if order.created.timestamp > date_expire.timestamp %}#}
-                            <div class="">
-                                <a class="btn btn-outline-success" href="{% url "order:refund-create" order.id %}">Refund</a>
-                            </div>
-{#                        {% endif %}#}
+                        {#                        {% if order.created.timestamp > date_expire.timestamp %}#}
+                        {#                            <div class="">#}
+                        {#                                <a class="btn btn-outline-success" href="{% url "order:refund-create" order.id %}">Refund</a>#}
+                        {#                            </div>#}
+                        {#                        {% endif %}#}
                     </div>
                 {% endfor %}
             </div>

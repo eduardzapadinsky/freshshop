@@ -11,4 +11,6 @@ app_name = "order"
 urlpatterns = [
     path("orders/create/<str:slug>/", views.OrderProduct.as_view(), name="order-create"),
     path("orders/", views.OrderListView.as_view(), name="order-list"),
+    path("orders/refund/", views.RefundListView.as_view(), name="refund-list"),
+    path("orders/refund/<int:id>/", views.RefundOrder.as_view(), name="refund-create"),
 ]

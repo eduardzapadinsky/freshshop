@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from django.db import models
 
@@ -20,8 +20,7 @@ class Refund(models.Model):
     """
     Model for refunding shop products
     """
-    expiry = datetime.now() + timedelta(minutes=3)
 
     order: str = models.OneToOneField(Order, on_delete=models.CASCADE)
     created: datetime = models.DateTimeField(auto_now_add=True)
-    expiry_date: datetime = models.DateTimeField(default=expiry)
+    is_approved: bool = models.BooleanField(default=False)
