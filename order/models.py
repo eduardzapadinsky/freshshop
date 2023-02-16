@@ -23,4 +23,3 @@ class Refund(models.Model):
 
     order: str = models.OneToOneField(Order, on_delete=models.CASCADE)
     created: datetime = models.DateTimeField(auto_now_add=True)
-    is_approved: bool = models.BooleanField(default=False)

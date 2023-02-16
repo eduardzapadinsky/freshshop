@@ -46,9 +46,9 @@ class OrderProduct(View):
             return redirect("product:product-detail", slug)
 
 
-class RefundOrder(View):
+class CreateRefundOrder(View):
     """
-    Refund order by user
+    Create refund order by user
     """
 
     def get(self, request, id):
@@ -63,6 +63,29 @@ class RefundOrder(View):
             messages.warning(request, "Time is over. You couldn't bring it back anymore!")
             return redirect("order:order-list")
         return redirect("order:refund-list")
+
+
+class ApproveRefundOrder(View):
+    """
+    Delete refund order by admin
+    """
+
+    def get(self, request, id):
+        if request.user.is_superuser:
+            try:
+                refund_to_approve = Refund.objects.get(id=id)
+                refund_order = refund_to_approve.order
+                user = refund_to_approve.order.user
+                product = refund_order.product
+                user.wallet += product.price * refund_order.count
+                user.save()
+                refund_order.product.count += refund_order.count
+                product.save()
+                refund_to_approve.delete()
+                refund_order.delete()
+            except Refund.DoesNotExist:
+                messages.warning(request, "There isn't refund order")
+            return redirect("order:refund-list")
 
 
 class OrderListView(ListView):
@@ -90,5 +113,8 @@ class RefundListView(ListView):
 
     def get_queryset(self):
         user = UserModel.objects.get(id=self.request.user.id)
-        queryset = Refund.objects.filter(order__user=user)
+        if user.is_superuser:
+            queryset = Refund.objects.all()
+        else:
+            queryset = Refund.objects.filter(order__user=user)
         return queryset

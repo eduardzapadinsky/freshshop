@@ -8,7 +8,7 @@ class OrderAdmin(admin.ModelAdmin):
     """
     Admin panel: Order
     """
-    list_display = ["user", "product", "count", "created"]
+    list_display = ["id", "user", "product", "count", "created"]
 
 
 @admin.register(Refund)

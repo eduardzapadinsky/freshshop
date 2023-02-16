@@ -1,6 +1,7 @@
 from django.contrib.auth.views import LogoutView
 from django.shortcuts import render, redirect
 from django.contrib import auth
+from django.contrib import messages
 
 from .models import UserModel
 from .forms import RegistrationForm, LoginForm
