@@ -9,6 +9,7 @@ class Order(models.Model):
     """
     Model for shop order
     """
+
     user: str = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     product: str = models.ForeignKey(Product, on_delete=models.CASCADE)
     count: float = models.DecimalField(max_digits=7, decimal_places=2)

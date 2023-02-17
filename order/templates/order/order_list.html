@@ -21,8 +21,12 @@
                 {% endif %}
                 {% for order in order_list %}
                     <div class="media mb-2 border-bottom">
-                        <div class="media-body"><h3>Order #{{ order.id }}</h3>
+                        <div class="media-body"><h3 class="title-h3">Order #{{ order.id }}</h3>
                             <div class="small text-dark">
+                                {% if user.is_superuser %}
+                                    User: {{ order.user.username }}
+                                    <span class="mx-2">|</span>
+                                {% endif %}
                                 Product: {{ order.product.name }}
                                 <span class="mx-2">|</span>
                                 Price: ${{ order.product.price }}
@@ -34,10 +38,16 @@
                                 Created at: {{ order.created }}
                             </div>
                         </div>
-                        <div class="">
-                            <a class="btn {% if order.created.timestamp > date_expire.timestamp %}btn-outline-success{% else %}btn-outline-warning{% endif %}"
-                               href="{% url "order:refund-create" order.id %}">Refund</a>
-                        </div>
+                        {% if not user.is_superuser %}
+                            <div>
+                                <a class="btn {% if order.created.timestamp > date_expire.timestamp %}btn-outline-success{% else %}btn-outline-warning{% endif %}"
+                                   href="{% url "order:refund-create" order.id %}">Refund</a>
+                            </div>
+                        {% else %}
+                            {% if order.is_deleted %}
+                                <div>✕ Refunded</div>
+                            {% endif %}
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>

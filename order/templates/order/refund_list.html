@@ -5,7 +5,7 @@
 
 {% block content %}
 
-    <div class="col-md-12 col-lg-12" style="min-height: calc(100vh - 220px)">
+    <div class="col-md-12 col-lg-12" style="min-height: calc(100vh - 205px)">
         <div class="odr-box">
             <div class="title-left">
                 <h3>Shopping cart</h3>
@@ -21,10 +21,15 @@
                 {% endif %}
                 {% for refund in refund_list %}
                     <div class="media mb-2 border-bottom">
-                        <div class="media-body"><a href="detail.html"> Refund #{{ refund.id }} for order
-                            #{{ refund.order.id }}
-                            {% if user.is_superuser %}, user: {{ refund.order.user.username }}{% endif %}</a>
+                        <div class="media-body"><h3 class="title-h3">Refund #{{ refund.id }}</h3>
                             <div class="small text-dark">
+                                <a style="font-size: 14px;" href="{% url "order:order-list" %}">Order
+                                    #{{ refund.order.id }}:</a>
+                                <span class="mx-3"></span>
+                                {% if user.is_superuser %}
+                                    User: {{ refund.order.user.username }}
+                                    <span class="mx-2">|</span>
+                                {% endif %}
                                 Product: {{ refund.order.product.name }}
                                 <span class="mx-2">|</span>
                                 Price: ${{ refund.order.product.price }}
@@ -38,17 +43,19 @@
                                 Refund created at: {{ refund.created }}
                             </div>
                         </div>
-                        {% if not refund.is_approved %}
-                            <div class="">
-                                <a class="btn btn-outline-success"
-                                   href="{% url "order:refund-approve" refund.id %}">Approve</a>
-                            </div>
-                            <div class="">
-                                <a class="btn btn-outline-danger"
-                                   href="{% url "order:refund-disapprove" refund.id %}">Reject</a>
-                            </div>
-                        {% else %}
-                            <div class=""> ✔ Approved</div>
+                        {% if user.is_superuser %}
+                            {% if not refund.is_approved %}
+                                <div class="">
+                                    <a class="btn btn-outline-success"
+                                       href="{% url "order:refund-approve" refund.id %}">Approve</a>
+                                </div>
+                                <div class="">
+                                    <a class="btn btn-outline-danger"
+                                       href="{% url "order:refund-disapprove" refund.id %}">Reject</a>
+                                </div>
+                            {% else %}
+                                <div> ✔ Approved</div>
+                            {% endif %}
                         {% endif %}
                     </div>
                 {% endfor %}

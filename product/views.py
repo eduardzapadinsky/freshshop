@@ -17,7 +17,7 @@ class SuperuserRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
         return self.request.user.is_superuser
 
 
-class ProductBaseView(LoginRequiredMixin, View):
+class ProductBaseView(View):
     """
     Base view for Product views
     """

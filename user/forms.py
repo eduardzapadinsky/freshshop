@@ -2,12 +2,15 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.contrib.auth.password_validation import validate_password
-from django.contrib import messages
 
 from .models import UserModel
 
 
 class RegistrationForm(forms.Form):
+    """
+    Form for registration
+    """
+
     username = forms.CharField(max_length=20, required=True, label="Username",
                                widget=forms.TextInput(attrs={
                                    "class": "form-control",
@@ -51,6 +54,10 @@ class RegistrationForm(forms.Form):
 
 
 class LoginForm(forms.Form):
+    """
+    Form for login
+    """
+
     username = forms.CharField(label="Username", required=True,
                                widget=forms.TextInput(attrs={
                                    "class": "form-control",

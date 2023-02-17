@@ -4,6 +4,10 @@ from .models import Order
 
 
 class OrderForm(forms.Form):
+    """
+    Form for order
+    """
+
     count = forms.DecimalField(required=True, label="Count",
                                widget=forms.NumberInput(attrs={
                                    "class": "form-control",

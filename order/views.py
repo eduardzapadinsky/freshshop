@@ -10,9 +10,14 @@ from product.models import Product
 from user.models import UserModel
 from .models import Order, Refund
 from .forms import OrderForm
+from product.views import SuperuserRequiredMixin
 
 
 def delta_date():
+    """
+    Checking for time to refund goods
+    """
+
     date_expire = datetime.datetime.now() - datetime.timedelta(hours=40)
     return date_expire
 
@@ -23,6 +28,9 @@ class OrderProduct(LoginRequiredMixin, View):
     """
 
     def post(self, request, slug):
+        """
+        Create oder if valid
+        """
         form = OrderForm(request.POST)
         user = UserModel.objects.get(id=request.user.id)
         product = Product.objects.get(slug=slug)
@@ -53,6 +61,9 @@ class CreateRefundOrder(LoginRequiredMixin, View):
     """
 
     def get(self, request, id):
+        """
+        Create refund if valid
+        """
         order = Order.objects.get(id=id)
         if order.created.timestamp() > delta_date().timestamp():
             try:
@@ -66,58 +77,72 @@ class CreateRefundOrder(LoginRequiredMixin, View):
         return redirect("order:refund-list")
 
 
-class ApproveRefundOrder(LoginRequiredMixin, View):
+class ApproveRefundOrder(SuperuserRequiredMixin, View):
     """
     Delete refund order by admin
     """
 
     def get(self, request, id):
-        if request.user.is_superuser:
-            try:
-                refund_to_approve = Refund.objects.get(id=id)
-                refund_order = refund_to_approve.order
-                user = refund_to_approve.order.user
-                product = refund_order.product
-                user.wallet += product.price * refund_order.count
-                user.save()
-                refund_order.product.count += refund_order.count
-                product.save()
-                refund_to_approve.is_approved = True
-                refund_to_approve.save()
-                refund_order.is_deleted = True
-                refund_order.save()
-            except Refund.DoesNotExist:
-                messages.warning(request, "There isn't refund order")
-            return redirect("order:refund-list")
+        """
+        Create refund if valid
+        """
+        try:
+            refund_to_approve = Refund.objects.get(id=id)
+            refund_order = refund_to_approve.order
+            user = refund_to_approve.order.user
+            product = refund_order.product
+            user.wallet += product.price * refund_order.count
+            user.save()
+            refund_order.product.count += refund_order.count
+            product.save()
+            refund_to_approve.is_approved = True
+            refund_to_approve.save()
+            refund_order.is_deleted = True
+            refund_order.save()
+        except Refund.DoesNotExist:
+            messages.warning(request, "There isn't refund order")
+        return redirect("order:refund-list")
 
 
-class DisapproveRefundOrder(LoginRequiredMixin, View):
+class DisapproveRefundOrder(SuperuserRequiredMixin, View):
     """
     Delete refund order by admin
     """
 
     def get(self, request, id):
-        if request.user.is_superuser:
-            try:
-                refund_to_disapprove = Refund.objects.get(id=id)
-                refund_to_disapprove.delete()
-            except Refund.DoesNotExist:
-                messages.warning(request, "There isn't refund order")
-            return redirect("order:refund-list")
+        """
+        Delete refund if valid
+        """
+        try:
+            refund_to_disapprove = Refund.objects.get(id=id)
+            refund_to_disapprove.delete()
+        except Refund.DoesNotExist:
+            messages.warning(request, "There isn't refund order")
+        return redirect("order:refund-list")
 
 
 class OrderListView(LoginRequiredMixin, ListView):
     """
-    List of user orders
+    List of user orders. Admin can see all the orders
     """
+
     model = Order
 
     def get_queryset(self):
+        """
+        Create different queryset for user and admin
+        """
         user = UserModel.objects.get(id=self.request.user.id)
-        queryset = Order.objects.filter(user=user, is_deleted=False)
+        if user.is_superuser:
+            queryset = Order.objects.all()
+        else:
+            queryset = Order.objects.filter(user=user, is_deleted=False)
         return queryset
 
     def get_context_data(self, *args, **kwargs):
+        """
+        Add expire date to manage refunds
+        """
         context = super().get_context_data(*args, **kwargs)
         context["date_expire"] = delta_date()
         return context
@@ -127,9 +152,13 @@ class RefundListView(LoginRequiredMixin, ListView):
     """
     List of user refunds
     """
+
     model = Refund
 
     def get_queryset(self):
+        """
+        Create different queryset for user and admin
+        """
         user = UserModel.objects.get(id=self.request.user.id)
         if user.is_superuser:
             queryset = Refund.objects.all()

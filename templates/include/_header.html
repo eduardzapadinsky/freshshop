@@ -45,10 +45,11 @@
                     <li class="nav-item {% if 'products' in request.path or request.path == "/" %}active {% endif %}">
                         <a class="nav-link" href="{% url "product:homepage" %}">Shop</a></li>
                     {% if user.is_authenticated %}
-                        <li class="nav-item {% if 'orders' in request.path and not 'refund' in request.path %}active{% endif %}"><a
-                                class="nav-link"
-                                href="{% url "order:order-list" %}">Orders</a>
-                        </li>
+                            <li class="nav-item {% if 'orders' in request.path and not 'refund' in request.path %}active{% endif %}">
+                                <a
+                                        class="nav-link"
+                                        href="{% url "order:order-list" %}">Orders</a>
+                            </li>
                         <li class="nav-item  {% if 'refund' in request.path %}active{% endif %}"><a
                                 class="nav-link"
                                 href="{% url "order:refund-list" %}">Refunds</a>
@@ -59,8 +60,7 @@
             <!-- /.navbar-collapse -->
 
             <!-- Start Atribute Navigation -->
-            {% if user.is_authenticated %}
-                {#        {% if user.is_authenticated and not user.is_superuser %}#}
+            {% if user.is_authenticated and not user.is_superuser %}
                 <div class="attr-nav">
                     <ul>
                         <li class="nav-item"><a class="nav-link">Wallet: {{ user.wallet }}</a></li>

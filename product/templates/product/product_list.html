@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block content %}
     {% if not user.is_superuser %}
@@ -77,7 +76,9 @@
                                                     </div>
                                                     <div class="col-sm-6 col-md-6 col-lg-8 col-xl-8">
                                                         <div class="why-text full-width">
-                                                            <h4>{{ product.name }}</h4>
+                                                            <h4>
+                                                                <a style="color: #1b1e21; padding-left: 5px" href="{% url "product:product-detail" product.slug %}">{{ product.name }}</a>
+                                                            </h4>
                                                             <h5 style="font-weight: normal; background: whitesmoke;">
                                                                 Price:</h5>
                                                             <h5>

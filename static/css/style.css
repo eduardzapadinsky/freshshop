@@ -2591,13 +2591,24 @@
 }
  
 .card-outline-secondary .card-body a{
-	color: #ffffff;
+	color: #2b2b2b;
 	font-size: 18px;
 	font-weight: 700;
 	padding: 12px 25px;
 	border: none;
 }
 
+.title-h3{
+	color: #b0b435;
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.title-h3-2{
+	color: #2D2D2D;
+	font-size: 16px;
+	font-weight: 700;
+}
 
 
 
