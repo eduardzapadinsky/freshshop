@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Products - {{ product.name }}{% endblock %}
+
+{% block content %}
+
+    <div class="shop-detail-box-main">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-7 col-lg-7 col-md-6">
+                    <div class="single-product-details">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <ul>
+                                <li>
+                                    <div class="form-group quantity-box">
+                                        <p>
+                                            {% for field in form %}
+                                                <label for="{{ field.id_for_label }}"
+                                                       class="mb-2">{{ field.label }}</label>
+                                                {{ field }}
+                                                {% if field.errors %}
+                                                    <div class="alert alert-danger">
+                                                        {{ field.errors }}
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="price-box-bar">
+                                <div class="cart-and-bay-btn col-xl-7 col-lg-7 col-md-6">
+                                    <button type="submit" class="btn"
+                                            onMouseOver="this.style.background='#9EBFA1'"
+                                            onMouseOut="this.style.background='#CCCDCC'">
+                                        {% if 'update' in request.path %}Update{% else %}Create{% endif %}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

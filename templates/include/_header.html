@@ -42,16 +42,16 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar-menu">
                 <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
-                    <li class="nav-item {% if request.path|slice:"1:9" == 'products' or request.path == "/" %}active {% endif %}">
+                    <li class="nav-item {% if 'products' in request.path or request.path == "/" %}active {% endif %}">
                         <a class="nav-link" href="{% url "product:homepage" %}">Shop</a></li>
                     {% if user.is_authenticated %}
-                        <li class="nav-item {% if request.path|slice:"1:-1" == 'orders' %}active{% endif %}"><a
+                        <li class="nav-item {% if 'orders' in request.path and not 'refund' in request.path %}active{% endif %}"><a
                                 class="nav-link"
                                 href="{% url "order:order-list" %}">Orders</a>
                         </li>
-                        <li class="nav-item  {% if request.path|slice:"8:-1" == 'refunds' %}active{% endif %}"><a
+                        <li class="nav-item  {% if 'refund' in request.path %}active{% endif %}"><a
                                 class="nav-link"
-                                href="{% url "order:refund-list" %}">Refund</a>
+                                href="{% url "order:refund-list" %}">Refunds</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -63,7 +63,7 @@
                 {#        {% if user.is_authenticated and not user.is_superuser %}#}
                 <div class="attr-nav">
                     <ul>
-                        <li class="nav-item"><a class="nav-link" href="">Wallet: {{ user.wallet }}</a></li>
+                        <li class="nav-item"><a class="nav-link">Wallet: {{ user.wallet }}</a></li>
                     </ul>
                 </div>
             {% endif %}

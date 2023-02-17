@@ -101,8 +101,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Authentication
 
 AUTH_USER_MODEL = "user.UserModel"
+LOGIN_URL = "/login/"
 
-# LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/"
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -124,7 +125,8 @@ STATICFILES_DIRS = [STATIC_DIR]
 
 # Upload media dir
 
-MEDIA_ROOT = BASE_DIR / 'uploads'
+# MEDIA_ROOT = BASE_DIR / 'uploads'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/uploads/'
 
 # Default primary key field type

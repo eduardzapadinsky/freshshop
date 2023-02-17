@@ -13,5 +13,6 @@ urlpatterns = [
     path("orders/", views.OrderListView.as_view(), name="order-list"),
     path("orders/refund/", views.RefundListView.as_view(), name="refund-list"),
     path("orders/refund/<int:id>/", views.CreateRefundOrder.as_view(), name="refund-create"),
-    path("orders/refund/delete/<int:id>/", views.ApproveRefundOrder.as_view(), name="refund-approve"),
+    path("orders/refund/approve/<int:id>/", views.ApproveRefundOrder.as_view(), name="refund-approve"),
+    path("orders/refund/disapprove/<int:id>/", views.DisapproveRefundOrder.as_view(), name="refund-disapprove"),
 ]

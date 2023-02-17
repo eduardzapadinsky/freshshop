@@ -25,6 +25,8 @@ def register(request):
                 user.is_active = True
                 user.save()
                 return redirect('product:homepage')
+        else:
+            messages.warning(request, "Fill in the fields correctly")
 
     form = RegistrationForm()
     context = {
@@ -44,6 +46,7 @@ def login(request):
                 user.is_active = True
                 user.save()
             else:
+                messages.warning(request, "Check your name and password")
                 return render(request, 'user/login.html', {'form': form})
             return redirect('product:homepage')
     else:

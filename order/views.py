@@ -1,14 +1,15 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.views import View
 from django.views.generic import ListView
-import datetime
 from django.db import IntegrityError
+import datetime
 
 from product.models import Product
+from user.models import UserModel
 from .models import Order, Refund
 from .forms import OrderForm
-from user.models import UserModel
 
 
 def delta_date():
@@ -16,7 +17,7 @@ def delta_date():
     return date_expire
 
 
-class OrderProduct(View):
+class OrderProduct(LoginRequiredMixin, View):
     """
     Order product by user
     """
@@ -46,7 +47,7 @@ class OrderProduct(View):
             return redirect("product:product-detail", slug)
 
 
-class CreateRefundOrder(View):
+class CreateRefundOrder(LoginRequiredMixin, View):
     """
     Create refund order by user
     """
@@ -65,7 +66,7 @@ class CreateRefundOrder(View):
         return redirect("order:refund-list")
 
 
-class ApproveRefundOrder(View):
+class ApproveRefundOrder(LoginRequiredMixin, View):
     """
     Delete refund order by admin
     """
@@ -81,14 +82,31 @@ class ApproveRefundOrder(View):
                 user.save()
                 refund_order.product.count += refund_order.count
                 product.save()
-                refund_to_approve.delete()
-                refund_order.delete()
+                refund_to_approve.is_approved = True
+                refund_to_approve.save()
+                refund_order.is_deleted = True
+                refund_order.save()
             except Refund.DoesNotExist:
                 messages.warning(request, "There isn't refund order")
             return redirect("order:refund-list")
 
 
-class OrderListView(ListView):
+class DisapproveRefundOrder(LoginRequiredMixin, View):
+    """
+    Delete refund order by admin
+    """
+
+    def get(self, request, id):
+        if request.user.is_superuser:
+            try:
+                refund_to_disapprove = Refund.objects.get(id=id)
+                refund_to_disapprove.delete()
+            except Refund.DoesNotExist:
+                messages.warning(request, "There isn't refund order")
+            return redirect("order:refund-list")
+
+
+class OrderListView(LoginRequiredMixin, ListView):
     """
     List of user orders
     """
@@ -96,7 +114,7 @@ class OrderListView(ListView):
 
     def get_queryset(self):
         user = UserModel.objects.get(id=self.request.user.id)
-        queryset = Order.objects.filter(user=user)
+        queryset = Order.objects.filter(user=user, is_deleted=False)
         return queryset
 
     def get_context_data(self, *args, **kwargs):
@@ -105,7 +123,7 @@ class OrderListView(ListView):
         return context
 
 
-class RefundListView(ListView):
+class RefundListView(LoginRequiredMixin, ListView):
     """
     List of user refunds
     """
@@ -116,5 +134,5 @@ class RefundListView(ListView):
         if user.is_superuser:
             queryset = Refund.objects.all()
         else:
-            queryset = Refund.objects.filter(order__user=user)
+            queryset = Refund.objects.filter(order__user=user, is_approved=False)
         return queryset

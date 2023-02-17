@@ -1,8 +1,11 @@
 {% extends "base.html" %}
+{% load multiply %}
+
+{% block title %}Orders{% endblock %}
 
 {% block content %}
 
-    <div class="col-md-12 col-lg-12">
+    <div class="col-md-12 col-lg-12" style="min-height: calc(100vh - 220px)">
         <div class="odr-box">
             <div class="title-left">
                 <h3>Shopping cart</h3>
@@ -18,7 +21,7 @@
                 {% endif %}
                 {% for order in order_list %}
                     <div class="media mb-2 border-bottom">
-                        <div class="media-body"><a href="detail.html"> Order #{{ order.id }}</a>
+                        <div class="media-body"><h3>Order #{{ order.id }}</h3>
                             <div class="small text-dark">
                                 Product: {{ order.product.name }}
                                 <span class="mx-2">|</span>
@@ -26,16 +29,15 @@
                                 <span class="mx-2">|</span>
                                 Qty: {{ order.count }}
                                 <span class="mx-2">|</span>
-                                Subtotal: ${% widthratio order.product.price 1 order.count %}
+                                Subtotal: ${% multiply order.product.price order.count %}
                                 <span class="mx-2">|</span>
                                 Created at: {{ order.created }}
                             </div>
                         </div>
-{#                        {% if order.created.timestamp > date_expire.timestamp %}#}
-                            <div class="">
-                                <a class="btn btn-outline-success" href="{% url "order:refund-create" order.id %}">Refund</a>
-                            </div>
-{#                        {% endif %}#}
+                        <div class="">
+                            <a class="btn {% if order.created.timestamp > date_expire.timestamp %}btn-outline-success{% else %}btn-outline-warning{% endif %}"
+                               href="{% url "order:refund-create" order.id %}">Refund</a>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
