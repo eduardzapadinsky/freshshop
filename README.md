@@ -1,3 +1,7 @@
+# DJANGO Online Shop
+Online market using Django
+
+
 # DJANGO PROJECT TEMPLATE
 
 DISCLAIMER: this repository will help you to set up your environment for the
