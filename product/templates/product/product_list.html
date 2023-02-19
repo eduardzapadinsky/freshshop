@@ -21,10 +21,12 @@
                                                             </div>
                                                             <img src="{{ product.picture.url }}" class="img-fluid"
                                                                  alt="{{ product.name }}">
-                                                            <div class="mask-icon">
-                                                                <a class="cart"
-                                                                   href="{% url "product:product-detail" product.slug %}">Buy</a>
-                                                            </div>
+                                                            {% if user.is_authenticated %}
+                                                                <div class="mask-icon">
+                                                                    <a class="cart"
+                                                                       href="{% url "product:product-detail" product.slug %}">Buy</a>
+                                                                </div>
+                                                            {% endif %}
                                                         </div>
                                                         <div class="why-text">
                                                             <h4>
@@ -77,7 +79,8 @@
                                                     <div class="col-sm-6 col-md-6 col-lg-8 col-xl-8">
                                                         <div class="why-text full-width">
                                                             <h4>
-                                                                <a style="color: #1b1e21; padding-left: 5px" href="{% url "product:product-detail" product.slug %}">{{ product.name }}</a>
+                                                                <a style="color: #1b1e21; padding-left: 5px"
+                                                                   href="{% url "product:product-detail" product.slug %}">{{ product.name }}</a>
                                                             </h4>
                                                             <h5 style="font-weight: normal; background: whitesmoke;">
                                                                 Price:</h5>

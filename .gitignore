@@ -20,5 +20,5 @@ __pycache__
 # local databases
 pgdata/
 pgsql/
-*.sqlite3
+#*.sqlite3
 *.db

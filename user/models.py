@@ -14,6 +14,11 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
+    def create_user(self, **extra_fields):
+        user = self.model(**extra_fields)
+        user.save()
+        return user
+
 
 class UserModel(AbstractUser):
     """

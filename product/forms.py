@@ -1,6 +1,5 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.db import IntegrityError
 
 from .models import Product
 
@@ -23,7 +22,7 @@ class ProductForm(forms.ModelForm):
             try:
                 Product.objects.get(name=name)
                 raise ValidationError("Name exists. Choose another one.")
-            except IntegrityError:
+            except Product.DoesNotExist:
                 return name
         else:
             return name

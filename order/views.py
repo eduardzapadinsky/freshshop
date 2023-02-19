@@ -18,7 +18,7 @@ def delta_date():
     Checking for time to refund goods
     """
 
-    date_expire = datetime.datetime.now() - datetime.timedelta(hours=40)
+    date_expire = datetime.datetime.now() - datetime.timedelta(minutes=3)
     return date_expire
 
 
