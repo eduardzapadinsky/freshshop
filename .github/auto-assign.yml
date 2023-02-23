@@ -1,14 +1,14 @@
 # Add reviewers to PR
-addReviewers: true
+# addReviewers: true
 
 # Set PR's author as an assignee
-addAssignees: author
+# addAssignees: author
 
 # A list of reviewers to be added to the PR
-reviewers:
+# reviewers:
   - shorodilov
   - PonomaryovVladyslav
 
 # A number of reviewers added to the PR
 # 0 means add all listed reviewers
-numberOfReviewers: 0
+# numberOfReviewers: 0
