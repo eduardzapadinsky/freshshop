@@ -1,5 +1,4 @@
-Django online shop
-Online market using Django
+Django online shop. It simulates shop work with admin and user roles.
 
 
 Install:
