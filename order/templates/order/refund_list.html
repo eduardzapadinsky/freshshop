@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load multiply %}
+
+{% block title %}Refunds{% endblock %}
+
+{% block content %}
+
+    <div class="col-md-12 col-lg-12" style="min-height: calc(100vh - 205px)">
+        <div class="odr-box">
+            <div class="title-left">
+                <h3>Shopping cart</h3>
+            </div>
+            <div class="rounded p-2 bg-light">
+                {% if messages %}
+                    <ul class="messagelist">
+                        {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }} available-stock"
+                                                     style="color:red;"{% endif %} >{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% for refund in refund_list %}
+                    <div class="media mb-2 border-bottom">
+                        <div class="media-body"><h3 class="title-h3">Refund #{{ refund.id }}</h3>
+                            <div class="small text-dark">
+                                <a style="font-size: 14px;" href="{% url "order:order-list" %}">Order
+                                    #{{ refund.order.id }}:</a>
+                                <span class="mx-3"></span>
+                                {% if user.is_superuser %}
+                                    User: {{ refund.order.user.username }}
+                                    <span class="mx-2">|</span>
+                                {% endif %}
+                                Product: {{ refund.order.product.name }}
+                                <span class="mx-2">|</span>
+                                Price: ${{ refund.order.product.price }}
+                                <span class="mx-2">|</span>
+                                Qty: {{ refund.order.count }}
+                                <span class="mx-2">|</span>
+                                Subtotal: ${% multiply refund.order.product.price refund.order.count %}
+                                <span class="mx-2">|</span>
+                                Order created at: {{ refund.order.created }}
+                                <span class="mx-2">|</span>
+                                Refund created at: {{ refund.created }}
+                            </div>
+                        </div>
+                        {% if user.is_superuser %}
+                            {% if not refund.is_approved %}
+                                <div class="">
+                                    <a class="btn btn-outline-success"
+                                       href="{% url "order:refund-approve" refund.id %}">Approve</a>
+                                </div>
+                                <div class="">
+                                    <a class="btn btn-outline-danger"
+                                       href="{% url "order:refund-disapprove" refund.id %}">Reject</a>
+                                </div>
+                            {% else %}
+                                <div> ✔ Approved</div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load multiply %}
+
+{% block title %}Orders{% endblock %}
+
+{% block content %}
+
+    <div class="col-md-12 col-lg-12" style="min-height: calc(100vh - 220px)">
+        <div class="odr-box">
+            <div class="title-left">
+                <h3>Shopping cart</h3>
+            </div>
+            <div class="rounded p-2 bg-light">
+                {% if messages %}
+                    <ul class="messagelist">
+                        {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }} available-stock"
+                                                     style="color:red;"{% endif %} >{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% for order in order_list %}
+                    <div class="media mb-2 border-bottom">
+                        <div class="media-body"><h3 class="title-h3">Order #{{ order.id }}</h3>
+                            <div class="small text-dark">
+                                {% if user.is_superuser %}
+                                    User: {{ order.user.username }}
+                                    <span class="mx-2">|</span>
+                                {% endif %}
+                                Product: {{ order.product.name }}
+                                <span class="mx-2">|</span>
+                                Price: ${{ order.product.price }}
+                                <span class="mx-2">|</span>
+                                Qty: {{ order.count }}
+                                <span class="mx-2">|</span>
+                                Subtotal: ${% multiply order.product.price order.count %}
+                                <span class="mx-2">|</span>
+                                Created at: {{ order.created }}
+                            </div>
+                        </div>
+                        {% if not user.is_superuser %}
+                            <div>
+                                <a class="btn {% if order.created.timestamp > date_expire.timestamp %}btn-outline-success{% else %}btn-outline-warning{% endif %}"
+                                   href="{% url "order:refund-create" order.id %}">Refund</a>
+                            </div>
+                        {% else %}
+                            {% if order.is_deleted %}
+                                <div>✕ Refunded</div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
